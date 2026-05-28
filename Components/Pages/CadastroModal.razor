@@ -1,0 +1,94 @@
+<div class="overlay" id="overlay-proj" onclick="closeProjOverlay(event)">
+    <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2 id="proj-modal-title">Novo projeto</h2>
+            <button class="btn icon" onclick="closeProjModal()"><i class="ti ti-x"></i></button>
+        </div>
+        <div class="modal-tabs">
+            <button class="mtab active" id="mt-info" onclick="switchMTab('info')">Informações</button>
+            <button class="mtab" id="mt-etapas" onclick="switchMTab('etapas')">Etapas</button>
+        </div>
+
+        <div id="mtab-info">
+            <div class="form-row"><label>Nome do projeto</label><input type="text" id="f-nome"
+                                                                           placeholder="Ex: Automação SPED Fiscal"></div>
+                <div class="form-row"><label>Descrição</label><textarea id="f-desc"
+                                                                            placeholder="Objetivo do projeto"></textarea></div>
+                    <div class="grid2">
+                        <div class="form-row"><label>Setor / Sistema</label>
+                            <select id="f-area">
+                                <option>Integração</option>
+                                <option>Conta Azul</option>
+                                <option>SAPIENS</option>
+                                <option>DOMINIO</option>
+                                <option>Fiscal</option>
+                                <option>Outros</option>
+                            </select>
+                        </div>
+                        <div class="form-row"><label>Status</label>
+                            <select id="f-status">
+                                <option>Backlog</option>
+                                <option>Em andamento</option>
+                                <option>Revisão</option>
+                                <option>Concluído</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid2">
+                        <div class="form-row"><label>Prioridade</label>
+                            <select id="f-prior">
+                                <option>Alta</option>
+                                <option>Média</option>
+                                <option>Baixa</option>
+                            </select>
+                        </div>
+                        <div class="form-row"><label>Prazo geral</label><input type="date" id="f-prazo"></div>
+                    </div>
+                    <div class="form-row">
+                        <label>Progresso geral: <span id="f-prog-val"
+                                                          style="font-family:'DM Mono',monospace;color:var(--blue)">0%</span></label>
+                            <input type="range" id="f-prog" min="0" max="100" step="5" value="0"
+                                   oninput="document.getElementById('f-prog-val').textContent=this.value+'%'">
+                        </div>
+                        <div class="form-row"><label>Observações</label><textarea id="f-obs"
+                                                                                      placeholder="Contexto, dependências, empresas envolvidas..."></textarea></div>
+                        </div>
+
+                        <div id="mtab-etapas" style="display:none">
+                            <div class="etapas-list" id="etapas-list"></div>
+                            <div class="etapa-add-box">
+                                <div class="add-box-title"><i class="ti ti-plus" style="font-size:13px;vertical-align:-1px"></i> Nova
+                                    etapa</div>
+                                    <div class="form-row"><label>Nome da etapa</label><input type="text" id="e-nome"
+                                                                                                 placeholder="Ex: Levantamento de requisitos"></div>
+                                        <div class="form-row"><label>Descrição</label><textarea id="e-desc"
+                                                                                                    placeholder="O que será feito nessa etapa" style="min-height:52px"></textarea></div>
+                                            <div class="grid2">
+                                                <div class="form-row"><label>Responsável</label><input type="text" id="e-resp"
+                                                                                                           placeholder="Nome da pessoa"></div>
+                                                    <div class="form-row"><label>Prazo da etapa</label><input type="date" id="e-prazo"></div>
+                                                </div>
+                                                <div class="grid2">
+                                                    <div class="form-row"><label>Status</label>
+                                                        <select id="e-status">
+                                                            <option value="pendente">Pendente</option>
+                                                            <option value="em andamento">Em andamento</option>
+                                                            <option value="concluída">Concluída</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-row"><label>Data de início</label><input type="date" id="e-inicio"></div>
+                                                </div>
+                                                <div style="display:flex;justify-content:flex-end;margin-top:4px">
+                                                    <button class="btn primary sm" onclick="addEtapa()"><i class="ti ti-plus"></i> Adicionar
+                                                        etapa</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="modal-actions">
+                                                <button class="btn" onclick="closeProjModal()">Cancelar</button>
+                                                <button class="btn primary" onclick="saveProject()"><i class="ti ti-device-floppy"></i> Salvar
+                                                    projeto</button>
+                                                </div>
+                                            </div>
+                                        </div>

@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "gko99T/IRck=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\luan\\Documents\\Desenvolvimento Aplicativos\\2 - Desenvolvimento Web\\PainelKanbanDesenvolvimento\\PainelKanbanDesenvolvimento.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\luan\\.nuget\\packages\\dapper\\2.1.79\\dapper.2.1.79.nupkg.sha512",
+    "C:\\Users\\luan\\.nuget\\packages\\microsoft.aspnetcore.app.internal.assets\\10.0.8\\microsoft.aspnetcore.app.internal.assets.10.0.8.nupkg.sha512",
+    "C:\\Users\\luan\\.nuget\\packages\\stub.system.data.sqlite.core.netstandard\\1.0.119\\stub.system.data.sqlite.core.netstandard.1.0.119.nupkg.sha512",
+    "C:\\Users\\luan\\.nuget\\packages\\system.data.sqlite.core\\1.0.119\\system.data.sqlite.core.1.0.119.nupkg.sha512"
+  ],
+  "logs": []
+}

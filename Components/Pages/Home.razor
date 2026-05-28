@@ -1,0 +1,67 @@
+﻿@page "/"
+
+<PageTitle>Home</PageTitle>
+
+<div class="main">
+    <div class="stats" id="stats-bar">
+        <div class="stat">
+            <div class="stat-label">Total de projetos</div>
+            <div class="stat-val">${t}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Em andamento</div>
+            <div class="stat-val">${and}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Concluídos</div>
+            <div class="stat-val">${conc}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Atrasados</div>
+            <div class="stat-val red">${atr}</div>
+        </div>
+    </div>
+    <div class="toolbar">
+        <div class="filters">
+            <div class="fg">
+                <label><i class="ti ti-users" style="font-size:13px;vertical-align:-1px"></i> Responsável:</label>
+                <select id="filter-resp" onchange="render()">
+                    <option value="">Todos</option>
+                    @foreach (var responsavel in DbContext.GetAll<Responsavel>("Responsaveis"))
+                    {
+                        <option value="@responsavel.Idx">@responsavel.Nome</option>
+                    }
+                </select>
+            </div>
+            <div class="fg">
+                <label><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px"></i>
+                    Prioridade:</label>
+                    <select id="filter-prior" onchange="render()">
+                        <option value="">Todas</option>
+                        <option>Alta</option>
+                        <option>Média</option>
+                        <option>Baixa</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label><i class="ti ti-folder" style="font-size:13px;vertical-align:-1px"></i> Setor:</label>
+                    <select id="filter-area" onchange="render()">
+                        <option value="">Todos</option>
+                        @foreach (var setor in DbContext.GetAll<Setor>("Setores"))
+                        {
+                            <option value="@setor.Idx">@setor.Nome</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="status-tabs">
+                <button class="stab active" id="stab-todos" onclick="filterTab('todos',this)">Todos</button>
+                <button class="stab" id="stab-backlog" onclick="filterTab('backlog',this)">Backlog</button>
+                <button class="stab" id="stab-andamento" onclick="filterTab('em andamento',this)">Em andamento</button>
+                <button class="stab" id="stab-revisao" onclick="filterTab('revisão',this)">Revisão</button>
+                <button class="stab" id="stab-concluido" onclick="filterTab('concluído',this)">Concluídos</button>
+            </div>
+        </div>
+    </div>
+    <Kanban/>
+

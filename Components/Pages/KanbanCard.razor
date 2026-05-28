@@ -1,0 +1,29 @@
+<div class="card">
+<div class="card-title">@CurrentCard.Nome</div>
+<div class="card-desc">@CurrentCard.Descricao</div>
+    <div class="card-badges">
+        <span class="badge b-area">@(DbContext.GetByIndex<Setor>("Setores", CurrentCard.IndexSetor)!.Nome)</span>
+        <span class="badge b-alta">@((Prioridade)CurrentCard.Prioridade)</span>
+    </div>
+    <hr class="card-divider">
+    <div class="card-footer">
+        <div style="display:flex;align-items:center;gap:6px">
+            <span style="font-size:12px;color:var(--text3);font-style:italic">Sem responsável</span>
+        </div>
+
+    </div>
+
+
+</div>
+
+@code
+{
+    [Parameter]
+    public string? CardId { get; set; }
+
+    public Card CurrentCard = new Card();
+    protected override void OnInitialized()
+    {
+        CurrentCard = CardsManager.GetCardById("6f1d4d9c-9a0f-4c51-b65e-2d9c7d5e1a11");
+    }
+}
