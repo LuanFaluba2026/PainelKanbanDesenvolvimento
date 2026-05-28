@@ -24,23 +24,72 @@
         </div>
         <div class="kanban" id="kanban-board" style="grid-template-columns: repeat(4, minmax(0px, 1fr));">
             <div class="col">
-                <span class="col-title">Backlog</span>
-                <span class="col-count">0</span>
-                <KanbanCard/>
+                <div class="col-head">
+                    <span class="col-title">Backlog</span>
+                    <span class="col-count">@CardsManager.CardsBacklog.Count()</span>
+                </div>
+                @if(CardsManager.CardsBacklog.Count() == 0)
+                {
+                    <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                }
+                else
+                {
+                    foreach(var card in CardsManager.CardsBacklog)
+                    {
+                        <KanbanCard CardId="@card.Id"/>
+                    }
+                }
             </div>
             <div class="col">
-                <span class="col-title">Em andamento</span>
-                <span class="col-count">0</span>
+                <div class="col-head">
+                    <span class="col-title">Em andamento</span>
+                    <span class="col-count">@CardsManager.CardsAndamento.Count()</span>
+                </div>
+                @if(CardsManager.CardsAndamento.Count() == 0)
+                {
+                    <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                }
+                else
+                {
+                    foreach(var card in CardsManager.CardsAndamento)
+                    {
+                        <KanbanCard CardId="@card.Id"/>
+                    }
+                }
             </div>
             <div class="col">
-                <span class="col-title">Revisão</span>
-                <span class="col-count">0</span>
+                <div class="col-head">
+                    <span class="col-title">Revisão</span>
+                    <span class="col-count">@CardsManager.CardsRevisao.Count()</span>
+                </div>
+                @if(CardsManager.CardsRevisao.Count() == 0)
+                {
+                    <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                }
+                else
+                {
+                    foreach(var card in CardsManager.CardsRevisao)
+                    {
+                        <KanbanCard CardId="@card.Id"/>
+                    }
+                }
             </div>
             <div class="col">
                 <div class="col-head">
                     <span class="col-title">Concluído</span>
-                    <span class="col-count">0</span>
+                    <span class="col-count">@CardsManager.CardsConcluido.Count()</span>
                 </div>
+                @if(CardsManager.CardsConcluido.Count() == 0)
+                {
+                    <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                }
+                else
+                {
+                    foreach(var card in CardsManager.CardsConcluido)
+                    {
+                        <KanbanCard CardId="@card.Id"/>
+                    }
+                }
             </div>
         </div>
     </div>

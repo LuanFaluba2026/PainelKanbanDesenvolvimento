@@ -8,6 +8,7 @@ public class Card
     public Prioridade Prioridade { get; set; }
     public DateTime? Prazo { get; set;}
     public DateTime? DataCriacao { get; set; } = DateTime.Now;
+    public DateTime? DataComecoProjeto { get; set; }
     public string Nome { get; set; } = string.Empty;
     public string Descricao { get;set; } = string.Empty;
     public string? Observacao { get; set; }

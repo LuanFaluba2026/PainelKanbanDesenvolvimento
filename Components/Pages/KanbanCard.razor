@@ -1,4 +1,5 @@
 <div class="card">
+    <span class="badge b-atrasado" style='@(CardsManager.isAtrasado(CardId!) ? "" : "display:none;" )'>Atrasado</span>
 <div class="card-title">@CurrentCard.Nome</div>
 <div class="card-desc">@CurrentCard.Descricao</div>
     <div class="card-badges">
@@ -8,12 +9,9 @@
     <hr class="card-divider">
     <div class="card-footer">
         <div style="display:flex;align-items:center;gap:6px">
-            <span style="font-size:12px;color:var(--text3);font-style:italic">Sem responsável</span>
+            <span style="font-size:12px;color:var(--text3);font-style:italic"><b>Responsável:</b> @(DbContext.GetByIndex<Responsavel>("Responsaveis", CurrentCard.IndexResponsavel)!.Nome)</span>
         </div>
-
     </div>
-
-
 </div>
 
 @code
@@ -24,6 +22,7 @@
     public Card CurrentCard = new Card();
     protected override void OnInitialized()
     {
-        CurrentCard = CardsManager.GetCardById("6f1d4d9c-9a0f-4c51-b65e-2d9c7d5e1a11");
+        if(CardId != null)
+            CurrentCard = CardsManager.GetCardById(CardId);
     }
 }
