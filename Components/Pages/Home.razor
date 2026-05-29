@@ -1,66 +1,165 @@
-﻿@page "/"
+﻿@inject LayoutState LayoutState
+@page "/"
 
 <PageTitle>Home</PageTitle>
 
-<div class="main">
-<div class="stats" id="stats-bar">
-    <div class="stat">
-        <div class="stat-label">Total de projetos</div>
-        <div class="stat-val">@CardsManager.CardsDisponiveis.Count()</div>
+<CadastroModal ShowCadastroModal="ShowModal" ShowCadastroModalChanged="OnModalClosed" ExistingCard="@SelectedCard"/>
+
+<div class="header">
+  <div class="header-logo">
+    <i class="ti ti-code"></i>
+    Setor de desenvolvimento
+  </div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <div class="view-toggle">
+      <button class="vt-btn @(LayoutState.KanbanViewToggle ? "" : "active")" id="btn-kanban" title="Kanban" @onclick="LayoutState.ToggleKanbanView"><i class="ti ti-layout-columns"></i></button>
+      <button class="vt-btn @(LayoutState.KanbanViewToggle ? "active" : "")" id="btn-lista" title="Lista" @onclick="LayoutState.ToggleKanbanView"><i class="ti ti-list"></i></button>
     </div>
-    <div class="stat">
-        <div class="stat-label">Em andamento</div>
-        <div class="stat-val">@CardsManager.CardsAndamento.Count()</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Concluídos</div>
-        <div class="stat-val">@CardsManager.CardsConcluido.Count()</div>
-    </div>
-    <div class="stat">
-        <div class="stat-label">Atrasados</div>
-        <div class="stat-val red">@CardsManager.CardsDisponiveis.Where(x => CardsManager.isAtrasado(x.Id)).Count()</div>
-    </div>
+    <button class="btn primary" @onclick="ShowCadastroModal"><i class="ti ti-plus"></i> Novo projeto</button>
+  </div>
 </div>
-<div class="toolbar">
-    <div class="filters">
-        <div class="fg">
-            <label><i class="ti ti-users" style="font-size:13px;vertical-align:-1px"></i> Responsável:</label>
-            <select id="filter-resp" onchange="render()">
-                <option value="">Todos</option>
-                @foreach (var responsavel in DbContext.GetAll<Responsavel>("Responsaveis"))
-                {
-                    <option value="@responsavel.Idx">@responsavel.Nome</option>
-                }
-            </select>
+
+<div class="main">
+    <div class="stats" id="stats-bar">
+        <div class="stat">
+            <div class="stat-label">Total de projetos</div>
+            <div class="stat-val">@totalCount</div>
         </div>
-        <div class="fg">
-            <label><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px"></i>
-                Prioridade:</label>
-                <select id="filter-prior" onchange="render()">
-                    <option value="">Todas</option>
-                    <option>Alta</option>
-                    <option>Média</option>
-                    <option>Baixa</option>
-                </select>
-            </div>
+        <div class="stat">
+            <div class="stat-label">Em andamento</div>
+            <div class="stat-val">@andamentoCount</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Concluídos</div>
+            <div class="stat-val">@concluidoCount</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Atrasados</div>
+            <div class="stat-val red">@atrasadoCount</div>
+        </div>
+    </div>
+    <div class="toolbar">
+        <div class="filters">
             <div class="fg">
-                <label><i class="ti ti-folder" style="font-size:13px;vertical-align:-1px"></i> Setor:</label>
-                <select id="filter-area" onchange="render()">
+                <label><i class="ti ti-users" style="font-size:13px;vertical-align:-1px"></i> Responsável:</label>
+                <select value="@CurrentResponsavelIndex" @onchange="OnResponsavelChange">
                     <option value="">Todos</option>
-                    @foreach (var setor in DbContext.GetAll<Setor>("Setores"))
+                    @foreach (var r in DbContext.GetAll<Responsavel>("Responsaveis"))
                     {
-                        <option value="@setor.Idx">@setor.Nome</option>
+                        <option value="@r.Idx">@r.Nome</option>
                     }
                 </select>
             </div>
+            <div class="fg">
+                <label><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px"></i>
+                    Prioridade:</label>
+                    <select id="filter-prior" @bind="CurrentPrioridade">
+                        <option value="">Todas</option>
+                        <option value="@Prioridade.Alta">Alta</option>
+                        <option value="@Prioridade.Media">Média</option>
+                        <option value="@Prioridade.Baixa">Baixa</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label><i class="ti ti-folder" style="font-size:13px;vertical-align:-1px"></i> Setor:</label>
+                    <select id="filter-area" @onchange="OnSetorChange">
+                        <option value="">Todos</option>
+                        @foreach (var s in DbContext.GetAll<Setor>("Setores"))
+                        {
+                            <option value="@s.Idx">@s.Nome</option>
+                        }
+                    </select>
+                </div>
         </div>
         <div class="status-tabs">
-            <button class="stab active" id="stab-todos" onclick="filterTab('todos',this)">Todos</button>
-            <button class="stab" id="stab-backlog" onclick="filterTab('backlog',this)">Backlog</button>
-            <button class="stab" id="stab-andamento" onclick="filterTab('em andamento',this)">Em andamento</button>
-            <button class="stab" id="stab-revisao" onclick="filterTab('revisão',this)">Revisão</button>
-            <button class="stab" id="stab-concluido" onclick="filterTab('concluído',this)">Concluídos</button>
+            <button class="stab @(colIdx == 0 ? "active" : "")" id="stab-todos" @onclick="() => ChangeColIdx(0)">Todos</button>
+            <button class="stab @(colIdx == 1 ? "active" : "")" id="stab-backlog" @onclick="() => ChangeColIdx(1)">Backlog</button>
+            <button class="stab @(colIdx == 2 ? "active" : "")" id="stab-andamento" @onclick="() => ChangeColIdx(2)">Em andamento</button>
+            <button class="stab @(colIdx == 3 ? "active" : "")" id="stab-revisao" @onclick="() => ChangeColIdx(3)">Revisão</button>
+            <button class="stab @(colIdx == 4 ? "active" : "")" id="stab-concluido" @onclick="() => ChangeColIdx(4)">Concluídos</button>
         </div>
     </div>
+    <Kanban EnabledColsIdx="@colIdx" OnCardClick="ShowEditingModal"/>
 </div>
-<Kanban/>
+
+@code
+{
+    bool ShowModal = false;
+    int colIdx = 0;
+    void ChangeColIdx(int idx)
+    {
+        colIdx = idx;
+        StateHasChanged();
+    }
+    int totalCount = 0;
+    int andamentoCount = 0;
+    int concluidoCount = 0;
+    int atrasadoCount = 0;
+    protected override async Task OnInitializedAsync()
+    {
+        ReloadCount();
+        CardsManager.OnChange += ReloadCount;
+    }
+    Card? SelectedCard;
+    void ShowEditingModal(string cardId)
+    {
+        SelectedCard = CardsManager.TodosCards.FirstOrDefault(x => x.Id == cardId);
+        ShowModal = true;
+        InvokeAsync(StateHasChanged);
+    }
+    void ShowCadastroModal()
+    {
+        SelectedCard = null;
+        ShowModal = true;
+    }
+    async Task OnModalClosed(bool visivel)
+    {
+        ShowModal = visivel;
+        if (!visivel)
+        {
+            StateHasChanged();
+        }
+    }
+    async void ReloadCount()
+    {
+        totalCount = CardsManager.TodosCards.Count();
+        andamentoCount = CardsManager.TodosCards.Where(x => x.CurrentStatus == Status.EmAndamento).Count();
+        concluidoCount = CardsManager.TodosCards.Where(x => x.CurrentStatus == Status.Concluido).Count();
+        atrasadoCount = CardsManager.TodosCards.Where(x => CardsManager.IsAtrasado(x)).Count();
+        await InvokeAsync(StateHasChanged);
+    }
+    int? CurrentResponsavelIndex = null;
+    void OnResponsavelChange(ChangeEventArgs e)
+    {
+        CurrentResponsavelIndex = string.IsNullOrEmpty(e.Value?.ToString())
+            ? null
+            : int.Parse(e.Value.ToString()!);
+
+        FiltrarCards();
+        StateHasChanged();
+    }
+    public int? CurrentSetorIndex = null;
+    void OnSetorChange(ChangeEventArgs e)
+    {
+        CurrentSetorIndex = string.IsNullOrEmpty(e.Value?.ToString())
+            ? null
+            : int.Parse(e.Value.ToString()!);
+
+        FiltrarCards();
+        StateHasChanged();
+    }
+    Prioridade? prioridade = null;
+    public Prioridade? CurrentPrioridade
+    {
+        get => prioridade;
+        set
+        {
+            prioridade = value;
+            FiltrarCards();
+        }
+    }
+    void FiltrarCards()
+    {
+        CardsManager.FiltrarCards(CurrentResponsavelIndex, CurrentSetorIndex, CurrentPrioridade);
+    }
+}

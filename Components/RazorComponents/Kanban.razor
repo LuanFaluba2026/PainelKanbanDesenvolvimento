@@ -1,0 +1,179 @@
+@inject LayoutState LayoutState
+<div id="view-kanban">
+    <div class="kanban" id="kanban-board">
+        @if(!LayoutState.KanbanViewToggle)
+        {
+            <div id="view-lista">
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Projeto</th>
+                                <th>Setor</th>
+                                <th>Status</th>
+                                <th>Prioridade</th>
+                                <th>Responsável atual</th>
+                                <th>Etapa atual</th>
+                                <th>Dias na etapa</th>
+                                <th>Dias total</th>
+                                <th>Prazo</th>
+                                <th>Prog.</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            @if(CardsManager.CardsDisponiveis.Count() == 0)
+                            {
+                                <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                            }
+                            else
+                            {
+                                foreach(var card in CardsManager.CardsDisponiveis)
+                                {
+                                    <KanbanList CardId="@card.Id"/>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="kanban" id="kanban-board" style="grid-template-columns: repeat(@VisibleColsCount(), minmax(0px, 1fr));">
+                @if(ShowCol(1))
+                {
+                    <div class="col" @ondragover:preventDefault @ondrop="() => OnDrop(Status.Backlog)">
+                        <div class="col-head">
+                            <span class="col-title">Backlog</span>
+                            <span class="col-count">@CardsManager.CardsBacklog.Count()</span>
+                        </div>
+                        @if(CardsManager.CardsBacklog.Count() == 0)
+                        {
+                            <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                        }
+                        else
+                        {
+                            foreach(var card in CardsManager.CardsBacklog)
+                            {
+                                <KanbanCard CardId="@card.Id" OnDragStartCard="OnDragStart" OnCardClick="OnCardClick"/>
+                            }
+                        }
+                    </div>
+                }
+                @if(ShowCol(2))
+                {
+                    <div class="col" @ondragover:preventDefault @ondrop="() => OnDrop(Status.EmAndamento)">
+                        <div class="col-head">
+                            <span class="col-title">Em andamento</span>
+                            <span class="col-count">@CardsManager.CardsAndamento.Count()</span>
+                        </div>
+                        @if(CardsManager.CardsAndamento.Count() == 0)
+                        {
+                            <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                        }
+                        else
+                        {
+                            foreach(var card in CardsManager.CardsAndamento)
+                            {
+                                <KanbanCard CardId="@card.Id" OnDragStartCard="OnDragStart" OnCardClick="OnCardClick"/>
+                            }
+                        }
+                    </div>
+                }
+                @if(ShowCol(3))
+                {
+                    <div class="col" @ondragover:preventDefault @ondrop="() => OnDrop(Status.Revisao)">
+                        <div class="col-head">
+                            <span class="col-title">Revisão</span>
+                            <span class="col-count">@CardsManager.CardsRevisao.Count()</span>
+                        </div>
+                        @if(CardsManager.CardsRevisao.Count() == 0)
+                        {
+                            <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                        }
+                        else
+                        {
+                            foreach(var card in CardsManager.CardsRevisao)
+                            {
+                                <KanbanCard CardId="@card.Id" OnDragStartCard="OnDragStart" OnCardClick="OnCardClick"/>
+                            }
+                        }
+                    </div>
+                }
+                @if(ShowCol(4))
+                {
+                    <div class="col" @ondragover:preventDefault @ondrop="() => OnDrop(Status.Concluido)">
+                        <div class="col-head">
+                            <span class="col-title">Concluído</span>
+                            <span class="col-count">@CardsManager.CardsConcluido.Count()</span>
+                        </div>
+                        @if(CardsManager.CardsConcluido.Count() == 0)
+                    {
+                        <div class="empty"><i class="ti ti-inbox" style="font-size:24px;display:block;margin-bottom:6px;opacity:.4"></i>Nenhum projeto</div>
+                    }
+                    else
+                    {
+                        foreach(var card in CardsManager.CardsConcluido)
+                        {
+                                <KanbanCard CardId="@card.Id" OnDragStartCard="OnDragStart" OnCardClick="OnCardClick"/>
+                        }
+                    }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public int? EnabledColsIdx { get; set; }
+    [Parameter] public EventCallback<string> OnCardClick { get; set; }
+    bool ShowCol(int colId)
+    {
+        return EnabledColsIdx == 0 || EnabledColsIdx == colId;
+    }
+    int VisibleColsCount()
+    {
+        if (!EnabledColsIdx.HasValue || EnabledColsIdx == 0)
+            return 4;
+
+        return 1;
+    }
+    protected override void OnInitialized()
+    {
+        CardsManager.OnChange += Refresh;
+        LayoutState.OnChange += Refresh;
+    }
+
+    private async void Refresh()
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        CardsManager.OnChange -= Refresh;
+        LayoutState.OnChange -= Refresh;
+    }
+
+    //drag cards
+    private Card? draggedCard;
+    void OnDragStart(Card card)
+    {
+        draggedCard = card;
+    }
+    async Task OnDrop(Status status)
+    {
+        if (draggedCard == null)
+            return;
+
+        draggedCard.CurrentStatus = status;
+
+        await CardsManager.UpdateCardAsync(draggedCard);
+
+        draggedCard = null;
+
+        await InvokeAsync(StateHasChanged);
+    }
+}

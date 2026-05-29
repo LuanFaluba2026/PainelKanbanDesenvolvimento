@@ -1,14 +1,13 @@
 using System.Data.SQLite;
 using Dapper;
-using PainelKanbanDesenvolvimento.Components.Models;
+using PainelKanbanDesenvolvimento.Components.Models.Enum;
 using PainelKanbanDesenvolvimento.Components.Models.Kanban;
 
 namespace PainelKanbanDesenvolvimento.Components.Services;
 
 public static class DbContext
 {
-    private static readonly string DbPath =
-        @"C:\Users\secun\Downloads\PainelKanbanDev.db";
+    private static readonly string DbPath = @"C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\PainelKanbanDev.db";
 
     private static SQLiteConnection Connection()
     {
@@ -31,5 +30,48 @@ public static class DbContext
     {
         using var conn = Connection();
         return conn.QueryFirstOrDefault<T>($"SELECT * FROM {table} WHERE Idx=@Idx", new{ Idx = index});
+    }
+    public static async Task InsertEtapaAsync(Etapa etapa)
+    {
+        using var conn = Connection();
+        var sql = @"INSERT INTO Etapas (Id, IdProjeto, Nome, Descricao, ResponsavelIndex, Status, Prazo, DataCriacao, DataConclusao)
+        VALUES (@Id, @IdProjeto, @Nome, @Descricao, @ResponsavelIndex, @Status, @Prazo, @DataCriacao, @DataConclusao)
+        ";
+        await conn.ExecuteAsync(sql, etapa);
+    }
+    public static async Task InsertCardAsync(Card etapa)
+    {
+        using var conn = Connection();
+        var sql = @"INSERT INTO Cards (Id, CurrentStatus, Prioridade, Prazo, DataCriacao, Nome, Descricao, Observacao, IndexSetor, IndexResponsavel, DataComecoProjeto)
+        VALUES (@Id, @CurrentStatus, @Prioridade, @Prazo, @DataCriacao, @Nome, @Descricao, @Observacao, @IndexSetor, @IndexResponsavel, @DataComecoProjeto)
+        ";
+        await conn.ExecuteAsync(sql, etapa);
+    }
+    public static async Task UpdateCardStatusAsync(Card card)
+    {
+        using var connection = Connection();
+
+        var sql = @"
+            UPDATE Cards
+            SET
+                Nome = @Nome,
+                Descricao = @Descricao,
+                CurrentStatus = @CurrentStatus,
+                Prioridade = @Prioridade,
+                Prazo = @Prazo,
+                IndexResponsavel = @IndexResponsavel,
+                IndexSetor = @IndexSetor,
+                Observacao = @Observacao
+            WHERE Id = @Id";
+
+        await connection.ExecuteAsync(sql, card);
+    }
+    public static async Task DeleteCardByIdAsync(string id)
+    {
+        using var connection = Connection();
+
+        var sql = @"DELETE FROM Cards WHERE Id = @Id";
+
+        await connection.ExecuteAsync(sql, new { Id = id });
     }
 }

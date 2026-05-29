@@ -1,0 +1,44 @@
+@using System.Runtime.InteropServices
+<div class="card" draggable="true" @ondragstart="() => OnDragStartCard.InvokeAsync(CurrentCard)" @onclick="() => OnCardClick.InvokeAsync(CurrentCard.Id)">
+    <span class="badge b-atrasado" style='@(CardsManager.IsAtrasado(CurrentCard) ? "" : "display:none;" )'>Atrasado</span>
+    <div class="card-title">@CurrentCard.Nome</div>
+    <div class="card-desc">@CurrentCard.Descricao</div>
+        <div class="card-badges">
+            <span class="badge b-area">@(DbContext.GetByIndex<Setor>("Setores", CurrentCard.IndexSetor)!.Nome)</span>
+            <span class="badge b-alta">@((Prioridade)CurrentCard.Prioridade)</span>
+        </div>
+        <hr class="card-divider">
+        <div class="card-footer">
+            <div style="display:flex;align-items:center;gap:6px">
+                <span style="font-size:12px;color:var(--text3);font-style:italic"><b>Responsável:</b> @(DbContext.GetByIndex<Responsavel>("Responsaveis", CurrentCard.IndexResponsavel)!.Nome)</span>
+            </div>
+        </div>
+</div>
+
+@code
+{
+    [Parameter] public string? CardId { get; set; }
+    [Parameter] public EventCallback<Card> OnDragStartCard { get; set; }
+    [Parameter] public EventCallback<string> OnCardClick { get; set;}
+
+    public Card CurrentCard = new Card();
+    protected override void OnParametersSet()
+    {
+        if(CardId != null)
+            CurrentCard = CardsManager.GetCardById(CardId)!;
+    }
+    protected override void OnInitialized()
+    {
+        CardsManager.OnChange += Refresh;
+    }
+
+    void Refresh()
+    {
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        CardsManager.OnChange -= Refresh;
+    }
+}

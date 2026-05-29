@@ -95,3 +95,4 @@ C:\Users\secun\OneDrive\Documentos\Dev\PainelKanbanDesenvolvimento\obj\Debug\net
 C:\Users\secun\OneDrive\Documentos\Dev\PainelKanbanDesenvolvimento\obj\Debug\net10.0\PainelKanbanDesenvolvimento.pdb
 C:\Users\secun\OneDrive\Documentos\Dev\PainelKanbanDesenvolvimento\obj\Debug\net10.0\PainelKanbanDesenvolvimento.genruntimeconfig.cache
 C:\Users\secun\OneDrive\Documentos\Dev\PainelKanbanDesenvolvimento\obj\Debug\net10.0\ref\PainelKanbanDesenvolvimento.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Debug\net10.0\PainelKanbanDesenvolvimento.sourcelink.json

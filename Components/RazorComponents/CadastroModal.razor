@@ -1,0 +1,326 @@
+@using System.ComponentModel.DataAnnotations
+@if (ShowCadastroModal)
+{
+    <div class="overlay open" @onclick="Fechar">
+        <div class="modal" @onclick:stopPropagation="true">
+
+            <div class="modal-header">
+                <h2>@(!isEditing ? "Novo projeto" : "Editar Projeto")</h2>
+                <button type="button" class="btn icon" @onclick="Fechar">
+                    <i class="ti ti-x">X</i>
+                </button>
+            </div>
+
+            <div class="modal-tabs">
+                <button class="mtab @(infoModalActive ? "active" : "")" @onclick="ShowInformacoesModal">Informações</button>
+                <button class="mtab @(etapaModalActive ? "active" : "")" @onclick="ShowEtapasModal">Etapas</button>
+            </div>
+                <EditForm Model="@projetoModel" OnValidSubmit="Salvar">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                    @if(infoModalActive)
+                    {
+                        <div class="form-row">
+                            <label>Nome do projeto</label>
+                            <InputText class="input" @bind-Value="projetoModel.Nome" />
+                        </div>
+
+                        <div class="form-row">
+                            <label>Responsável</label>
+                            <InputSelect class="input" @bind-Value="projetoModel.ResponsavelIdx">
+                                @foreach (var r in DbContext.GetAll<Responsavel>("Responsaveis"))
+                                {
+                                    <option value="@r.Idx">@r.Nome</option>
+                                }
+                            </InputSelect>
+                        </div>
+
+                        <div class="form-row">
+                            <label>Descrição</label>
+                            <InputTextArea class="input" @bind-Value="projetoModel.Descricao" />
+                        </div>
+
+                        <div class="grid2">
+
+                            <div class="form-row">
+                                <label>Setor</label>
+                                <InputSelect class="input" @bind-Value="projetoModel.SetorIdx">
+                                    <option value="">Selecione</option>
+                                    @foreach (var s in DbContext.GetAll<Setor>("Setores"))
+                                    {
+                                        <option value="@s.Idx">@s.Nome</option>
+                                    }
+                                </InputSelect>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Status</label>
+                                <InputSelect class="input" @bind-Value="projetoModel.Status">
+                                    <option value="@Status.Backlog">Backlog</option>
+                                    <option value="@Status.EmAndamento">Em andamento</option>
+                                    <option value="@Status.Revisao">Revisão</option>
+                                    <option value="@Status.Concluido">Concluído</option>
+                                </InputSelect>
+                            </div>
+
+                        </div>
+
+                        <div class="grid2">
+
+                            <div class="form-row">
+                                <label>Prioridade</label>
+                                <InputSelect class="input" @bind-Value="projetoModel.Prioridade">
+                                    <option value="@Prioridade.Alta">Alta</option>
+                                    <option value="@Prioridade.Media">Média</option>
+                                    <option value="@Prioridade.Baixa">Baixa</option>
+                                </InputSelect>
+                            </div>
+
+                            <div class="form-row">
+                                <label>Prazo</label>
+                                <InputDate class="input" @bind-Value="projetoModel.Prazo" />
+                            </div>
+
+                        </div>
+
+                        <div class="form-row">
+                            <label>Observações</label>
+                            <InputTextArea class="input" @bind-Value="projetoModel.Observacoes" />
+                        </div>
+                    }else if(etapaModalActive)
+                    {
+                        @if (!EtapasManager.TodasEtapas.Any())
+                        {
+                            <div style="text-align:center;padding:1.25rem;color:var(--text3);font-size:13px">
+                                Nenhuma etapa cadastrada ainda.
+                            </div>
+                        }
+                        else{
+                            foreach(var etapa in EtapasManager.TodasEtapas.Where(x => x.IdProjeto == projetoModel.IdProjeto))
+                            {
+                                <div class="etapa-row">
+                                <div class="etapa-row-head">
+                                    <span class="etapa-row-title">
+                                    <span class="etapa-dot ed-and"></span>@etapa.Nome</span>
+                                    <div style="display:flex;align-items:center;gap:4px">
+                                    <select style="font-size:11px;padding:3px 6px;width:auto" onchange="changeEtapaStatus(1,this.value)">
+                                        <option value="pendente">Pendente</option>
+                                        <option value="em andamento" selected="">Em andamento</option>
+                                        <option value="concluída">Concluída</option>
+                                    </select>
+                                    <button class="btn icon sm" type="button" onclick="removeEtapa(@etapa.Id)"><i class="ti ti-trash" style="color:var(--red);font-size:14px">X</i></button>
+                                    </div>
+                                </div>
+                                <div class="etapa-row-meta" style="margin-bottom:5px">@etapa.Descricao</div>
+                                <div class="etapa-row-meta">
+                                    <span style="display:flex; align-items:center; gap:4px; max-width:150px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                                        <i class="ti ti-user" style="font-size:11px; vertical-align:-1px;"></i>
+                                        <b>Responsável:</b>
+                                        <span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                                            @(DbContext.GetByIndex<Responsavel>("Responsaveis", etapa.ResponsavelIndex)!.Nome)
+                                        </span>
+                                    </span>
+                                    <span><i class="ti ti-calendar" style="font-size:11px;vertical-align:-1px"></i> @(!string.IsNullOrEmpty(@etapa.Prazo.ToString()) ? $"Prazo: {@etapa.Prazo:dd/MM/yyyy}" : "")</span>
+                                    <span><i class="ti ti-player-play" style="font-size:11px;vertical-align:-1px"></i> @(!string.IsNullOrEmpty(@etapa.DataCriacao.ToString()) ? $"Inicio: {@etapa.DataCriacao:dd/MM/yyyy}" : "")</span>
+                                    <span style="font-family:'DM Mono',monospace;color:var(--red)"><i class="ti ti-clock" style="font-size:11px;vertical-align:-1px"></i>@EtapasManager.GetElapsedTimeByCardId(etapa.Id)d nesta etapa</span>
+                                </div>
+                                </div>
+                            }
+                        }
+
+                        <div class="etapa-add-box">
+                        <div class="add-box-title">
+                            <i class="ti ti-plus" style="font-size:13px;vertical-align:-1px"></i>
+                            Nova etapa
+                        </div>
+
+                            <div class="form-row">
+                                <label>Nome da etapa</label>
+                                <InputText class="input" @bind-Value="etapaModel.Nome" placeholder="Ex: Levantamento de requisitos" />
+                            </div>
+
+                            <div class="form-row">
+                                <label>Descrição</label>
+                                <InputTextArea class="input" @bind-Value="etapaModel.Descricao" placeholder="O que será feito nessa etapa" style="min-height:52px"/>
+                            </div>
+
+                            <div class="grid2">
+                                <div class="form-row">
+                                    <label>Responsável</label>
+                                    <InputSelect class="input" @bind-Value="etapaModel.ResponsavelIdx">
+                                        <option value="">Selecionar</option>
+                                        @foreach (var r in DbContext.GetAll<Responsavel>("Responsaveis"))
+                                        {
+                                            <option value="@r.Idx">@r.Nome</option>
+                                        }
+                                    </InputSelect>
+                                </div>
+                                <div class="form-row">
+                                    <label>Prazo da etapa</label>
+                                    <InputDate class="input" @bind-Value="etapaModel.Prazo" />
+                                </div>
+                            </div>
+
+                            <div class="grid2">
+                                <div class="form-row">
+                                    <label>Status</label>
+                                    <InputSelect class="input" @bind-Value="etapaModel.Status">
+                                        <option value="">Selecionar</option>
+                                        <option value="@StatusEtapa.Pendente">Pendente</option>
+                                        <option value="@StatusEtapa.EmAndamento">Em andamento</option>
+                                        <option value="@StatusEtapa.Concluida">Concluída</option>
+                                    </InputSelect>
+                                </div>
+                                <div class="form-row">
+                                    <label>Data de início</label>
+                                    <InputDate class="input" @bind-Value="etapaModel.Inicio" />
+                                </div>
+                            </div>
+                            <div style="display:flex;justify-content:flex-end;margin-top:4px">
+                                <button @onclick="AdicionarEtapa" type="button" class="btn primary sm"><i class="ti ti-plus"></i>Adicionar etapa</button>
+                            </div>
+                        </div>
+                    }
+                    <div class="modal-actions">
+                        @if(isEditing)
+                        {
+                            <button type="button" class="btn" style="background-color: red; color:white;" @onclick="RemoverCard">Deletar</button>
+                        }
+                        <button type="button" class="btn" @onclick="Fechar">Cancelar</button>
+                        <button type="submit" class="btn primary">
+                            Salvar projeto
+                        </button>
+                    </div>
+
+                </EditForm>
+        </div>
+    </div>
+}
+
+@code {
+
+    [Parameter] public bool ShowCadastroModal { get; set; }
+    [Parameter] public EventCallback<bool> ShowCadastroModalChanged { get; set; }
+    [Parameter] public Card? ExistingCard {get; set;}
+
+    bool isEditing = false;
+    protected override void OnParametersSet()
+    {
+        if(ExistingCard != null)
+        {
+            isEditing = true;
+            projetoModel = new()
+            {
+                IdProjeto = ExistingCard!.Id,
+                Nome = ExistingCard.Nome,
+                Descricao = ExistingCard.Descricao,
+                ResponsavelIdx = ExistingCard.IndexResponsavel,
+                SetorIdx = ExistingCard.IndexSetor,
+                Status = ExistingCard.CurrentStatus,
+                Prioridade = ExistingCard.Prioridade,
+                Prazo = ExistingCard.Prazo,
+                Observacoes = ExistingCard.Observacao!
+            };
+        }
+        else
+        {
+            isEditing = false;
+            projetoModel = new();
+        }
+    }
+    private ProjetoFormModel projetoModel = new();
+    public class ProjetoFormModel
+    {
+        public string IdProjeto { get; set; } = Guid.NewGuid().ToString();
+        public string Nome { get; set; } = "";
+        public string Descricao { get; set; } = "";
+        public int ResponsavelIdx { get; set; }
+        public int SetorIdx { get; set; }
+        public Status Status { get; set; }
+        public Prioridade Prioridade { get; set; }
+        public DateTime? Prazo { get; set; }
+        public string Observacoes { get; set; } = "";
+    }
+    private EtapaFormModel etapaModel = new();
+    public class EtapaFormModel
+    {
+        [Required]
+        public string Nome { get; set; } = "";
+        [Required]
+        public string Descricao { get; set; } = "";
+        [Required]
+        public int ResponsavelIdx { get; set; }
+        public DateTime? Prazo { get; set; }
+        public DateTime? Inicio { get; set; } = DateTime.Now;
+        [Required]
+        public StatusEtapa Status { get; set; } = StatusEtapa.Pendente;
+    }
+    private async Task AdicionarEtapa()
+    {
+        var etapa = new Etapa()
+        {
+            IdProjeto = projetoModel.IdProjeto,
+            Nome = etapaModel.Nome,
+            Descricao = etapaModel.Descricao,
+            ResponsavelIndex = etapaModel.ResponsavelIdx,
+            DataCriacao = etapaModel.Inicio,
+            Status = etapaModel.Status,
+            Prazo = etapaModel.Prazo,
+        };
+        await EtapasManager.AddNewEtapaAsync(etapa);
+        etapaModel.Nome = "";
+        etapaModel.Descricao = "";
+        etapaModel.ResponsavelIdx = 0;
+        etapaModel.Prazo = null;
+        etapaModel.Inicio = DateTime.Now;
+        etapaModel.Status = StatusEtapa.Pendente;
+    }
+    private async Task Salvar()
+    {
+
+        var proj = new Card()
+        {
+            Id = projetoModel.IdProjeto,
+            CurrentStatus = projetoModel.Status,
+            Prioridade = projetoModel.Prioridade,
+            Prazo = projetoModel.Prazo,
+            Nome = projetoModel.Nome,
+            Descricao = projetoModel.Descricao,
+            Observacao = projetoModel.Observacoes,
+            IndexSetor = projetoModel.SetorIdx,
+            IndexResponsavel = projetoModel.ResponsavelIdx
+        };
+        if(isEditing)
+            await CardsManager.UpdateCardAsync(proj);
+        else
+            await CardsManager.AddNewCard(proj);
+        await Fechar();
+    }
+    private async Task RemoverCard()
+    {
+        if(isEditing)
+        {
+            await CardsManager.RemoveCardAsync(projetoModel.IdProjeto);
+            await Fechar();
+        }
+
+    }
+    private async Task Fechar()
+    {
+        await ShowCadastroModalChanged.InvokeAsync(false);
+    }
+
+    bool infoModalActive = true;
+    bool etapaModalActive = false;
+    void ShowInformacoesModal()
+    {
+        infoModalActive = true;
+        etapaModalActive = false;
+    }
+    void ShowEtapasModal()
+    {
+        infoModalActive = false;
+        etapaModalActive = true;
+    }
+}

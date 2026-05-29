@@ -1,5 +1,5 @@
 using PainelKanbanDesenvolvimento.Components;
-using PainelKanbanDesenvolvimento.Components.Services;
+using PainelKanbanDesenvolvimento.Components.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
+builder.Services.AddSingleton<LayoutState>();
 
 var app = builder.Build();
 

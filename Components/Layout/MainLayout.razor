@@ -1,18 +1,6 @@
-﻿@inherits LayoutComponentBase
-
-<div class="header">
-  <div class="header-logo">
-    <i class="ti ti-code"></i>
-    Setor de desenvolvimento
-  </div>
-  <div style="display:flex;align-items:center;gap:8px">
-    <div class="view-toggle">
-      <button class="vt-btn active" id="btn-kanban" title="Kanban"><i class="ti ti-layout-columns"></i></button>
-      <button class="vt-btn" id="btn-lista" title="Lista"><i class="ti ti-list"></i></button>
-    </div>
-    <button class="btn primary"><i class="ti ti-plus"></i> Novo projeto</button>
-  </div>
-</div>
+﻿@using PainelKanbanDesenvolvimento.Components.Pages
+@inject LayoutState LayoutState
+@inherits LayoutComponentBase
 
 @Body
 

@@ -14,5 +14,4 @@ public class Card
     public string? Observacao { get; set; }
     public int IndexSetor { get; set;}
     public int IndexResponsavel { get; set; }
-    public double Progresso { get; set; }
 }
