@@ -24,7 +24,6 @@ public static class CardsManager
     {
         TodosCards = DbContext.GetAll<Card>("Cards");
         CardsDisponiveis = new List<Card>(TodosCards);
-        AssembleCards();
     }
     public static async Task AddNewCard(Card card)
     {
@@ -59,31 +58,6 @@ public static class CardsManager
         await DbContext.DeleteCardByIdAsync(cardId);
         TodosCards.RemoveAll(x => x.Id == cardId);
         Reload();
-        OnChange?.Invoke();
-    }
-    private static void AssembleCards()
-    {
-        CardsBacklog = CardsDisponiveis.Where(x => x.CurrentStatus == Status.Backlog).ToList();
-        CardsAndamento = CardsDisponiveis.Where(x => x.CurrentStatus == Status.EmAndamento).ToList();
-        CardsRevisao = CardsDisponiveis.Where(x => x.CurrentStatus == Status.Revisao).ToList();
-        CardsConcluido = CardsDisponiveis.Where(x => x.CurrentStatus == Status.Concluido).ToList();
-    }
-
-    public static void FiltrarCards(int? responsavelIdx = null, int? setorIdx = null, Prioridade? p = null)
-    {
-        IEnumerable<Card> query = TodosCards;
-
-        if (responsavelIdx.HasValue)
-            query = query.Where(c => c.IndexResponsavel == responsavelIdx.Value);
-
-        if (setorIdx.HasValue)
-            query = query.Where(c => c.IndexSetor == setorIdx.Value);
-
-        if (p.HasValue)
-            query = query.Where(c => c.Prioridade == p.Value);
-
-        CardsDisponiveis = query.ToList();
-        AssembleCards();
         OnChange?.Invoke();
     }
 

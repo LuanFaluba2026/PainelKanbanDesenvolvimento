@@ -79,7 +79,7 @@
             <button class="stab @(colIdx == 4 ? "active" : "")" id="stab-concluido" @onclick="() => ChangeColIdx(4)">Concluídos</button>
         </div>
     </div>
-    <Kanban EnabledColsIdx="@colIdx" OnCardClick="ShowEditingModal"/>
+    <Kanban EnabledColsIdx="@colIdx" OnCardClick="ShowEditingModal" CardsDisponiveis="CardsDisponiveis"/>
 </div>
 
 @code
@@ -95,10 +95,13 @@
     int andamentoCount = 0;
     int concluidoCount = 0;
     int atrasadoCount = 0;
+
+    List<Card>? CardsDisponiveis { get; set; } 
     protected override async Task OnInitializedAsync()
     {
         ReloadCount();
         CardsManager.OnChange += ReloadCount;
+        CardsDisponiveis = CardsManager.TodosCards;
     }
     Card? SelectedCard;
     void ShowEditingModal(string cardId)
@@ -160,6 +163,22 @@
     }
     void FiltrarCards()
     {
-        CardsManager.FiltrarCards(CurrentResponsavelIndex, CurrentSetorIndex, CurrentPrioridade);
+        FiltrarCurrentCards(CurrentResponsavelIndex, CurrentSetorIndex, CurrentPrioridade);
+    }
+    private void FiltrarCurrentCards(int? responsavelIdx = null, int? setorIdx = null, Prioridade? p = null)
+    {
+        IEnumerable<Card> query = CardsManager.TodosCards;
+
+        if (responsavelIdx.HasValue)
+            query = query.Where(c => c.IndexResponsavel == responsavelIdx.Value);
+
+        if (setorIdx.HasValue)
+            query = query.Where(c => c.IndexSetor == setorIdx.Value);
+
+        if (p.HasValue)
+            query = query.Where(c => c.Prioridade == p.Value);
+
+        CardsDisponiveis = query.ToList();
+        StateHasChanged();
     }
 }
