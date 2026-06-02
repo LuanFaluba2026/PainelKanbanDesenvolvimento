@@ -6,13 +6,19 @@
     <td style="white-space:nowrap">@NormalizarTexto(CurrentCard.CurrentStatus.ToString())</td>
     <td><span class="badge b-@GetPrioridade(CurrentCard.Prioridade)">@CurrentCard.Prioridade</span></td>
     <td style="overflow-x: hidden; white-space:nowrap; text-overflow: ellipsis; max-width:160px">@(DbContext.GetByIndex<Responsavel>("Responsaveis", CurrentCard.IndexResponsavel)!.Nome ?? "-")</td>
-    <td style="font-size:12px;color:var(--text2);max-width:160px;word-break:break-word">—</td>
-    <td><span style="font-family:'DM Mono',monospace;font-size:12px;">—</span></td>
+    <td style="font-size:12px;color:var(--text2);max-width:160px;word-break:break-word">@(EtapasManager.TodasEtapas.FirstOrDefault(x => x.Status == StatusEtapa.EmAndamento && x.IdProjeto == CurrentCard.Id)?.Nome ?? "-")</td>
+    <td><span style="font-family:'DM Mono',monospace;font-size:12px;">@(EtapasManager.GetElapsedTimeByCardId(EtapasManager.TodasEtapas.FirstOrDefault(x => x.Status == StatusEtapa.EmAndamento && x.IdProjeto == CurrentCard.Id)?.Id ?? ""))d</span></td>
     <td><span style="font-family:'DM Mono',monospace;font-size:12px">@CardsManager.GetElapsedTimeByCardId(CurrentCard.Id)d</span></td>
-    <td style=";font-size:12px;white-space:nowrap">—</td>
+    <td style=";font-size:12px;white-space:nowrap">@(CurrentCard.Prazo?.ToString("dd/MM/yyyy") ?? "--/--/----" )</td>
     <td>
-    <div class="prog-bar" style="width:60px;display:inline-block;vertical-align:middle"><div class="prog-fill" style="width:0%"></div></div>
-    <span style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-left:4px">0%</span>
+    @if(EtapasManager.TodasEtapas.Any(x => x.IdProjeto == CurrentCard.Id))
+    {
+        <span style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-left:4px">@($"{CardsManager.GetProgressPercentage(CurrentCard, StatusEtapa.EmAndamento).ToString("F0")}%")</span>
+    }
+    else
+    {
+        <span style="font-size:11px;color:var(--text3);font-family:'DM Mono',monospace;margin-left:4px">—</span>
+    }
     </td>
     <td><button class="btn icon sm" onclick="editProject(1)" title="Editar"><i class="ti ti-edit"></i></button></td>
 </tr>
