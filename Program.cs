@@ -12,6 +12,8 @@ builder.Services.AddSingleton<LayoutState>();
 
 builder.Services.AddHostedService<DatabaseCleanupServices>();
 
+builder.WebHost.UseUrls("http://*:7654");
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

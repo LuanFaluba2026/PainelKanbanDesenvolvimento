@@ -7,7 +7,7 @@ namespace PainelKanbanDesenvolvimento.Components.Services;
 
 public static class DbContext
 {
-    private static readonly string DbPath = @"P:\Fiscal\Arquivos de Apoio\APLICATIVOS\X - Dados Compartilhados\PainelKanban\PainelKanbanDev.db";
+    private static readonly string DbPath = Path.Combine(AppContext.BaseDirectory, "Data/PainelKanbanDev.db");
 
     private static SQLiteConnection Connection()
     {

@@ -21,7 +21,6 @@ C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\Pain
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.AssemblyInfoInputs.cache
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.AssemblyInfo.cs
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.csproj.CoreCompileInputs.cache
-C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.sourcelink.json
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\rjimswa.dswa.cache.json
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\rjsmrazor.dswa.cache.json
@@ -32,8 +31,6 @@ C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\Pain
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\scopedcss\projectbundle\PainelKanbanDesenvolvimento.bundle.scp.css
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\l7bhtef2gl-{0}-4kywy7iv6g-4kywy7iv6g.gz
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\gtzvtu87tm-{0}-abdmv1u4y3-abdmv1u4y3.gz
-C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\lxe1wdiqku-{0}-ej96puwv3k-ej96puwv3k.gz
-C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\n2rhkdbs7i-{0}-cj5793hgrt-cj5793hgrt.gz
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\x2j9m19yxw-{0}-76zt91mgwh-76zt91mgwh.gz
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\q0o9zud7x0-{0}-76zt91mgwh-76zt91mgwh.gz
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\staticwebassets.build.json
@@ -47,3 +44,6 @@ C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\Pain
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.pdb
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.genruntimeconfig.cache
 C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\ref\PainelKanbanDesenvolvimento.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\PainelKanbanDesenvolvimento.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\lxe1wdiqku-{0}-ej96puwv3k-ej96puwv3k.gz
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\obj\Release\net10.0\compressed\n2rhkdbs7i-{0}-cj5793hgrt-cj5793hgrt.gz
