@@ -1,7 +1,7 @@
 @using System.ComponentModel.DataAnnotations
 @if (ShowCadastroModal)
 {
-    <div class="overlay open" @onclick="Fechar">
+    <div class="overlay open" @onclick="Fechar" style="z-index:120;">
         <div class="modal" @onclick:stopPropagation="true">
 
             <div class="modal-header">
@@ -104,12 +104,12 @@
                                     <span class="etapa-row-title">
                                     <span class="etapa-dot ed-and"></span>@etapa.Nome</span>
                                     <div style="display:flex;align-items:center;gap:4px">
-                                    <select style="font-size:11px;padding:3px 6px;width:auto" onchange="changeEtapaStatus(1,this.value)">
-                                        <option value="pendente">Pendente</option>
-                                        <option value="em andamento" selected="">Em andamento</option>
-                                        <option value="concluída">Concluída</option>
+                                    <select style="font-size:11px;padding:3px 6px;width:auto" value="@etapa.Status" @onchange="@(e => AlterarStatusEtapaAsync(etapa, e))"">
+                                        <option value="@StatusEtapa.Pendente">Pendente</option>
+                                        <option value="@StatusEtapa.EmAndamento">Em andamento</option>
+                                        <option value="@StatusEtapa.Concluida">Concluída</option>
                                     </select>
-                                    <button class="btn icon sm" type="button" onclick="removeEtapa(@etapa.Id)"><i class="ti ti-trash" style="color:var(--red);font-size:14px">X</i></button>
+                                    <button class="btn icon sm" type="button" @onclick="() => RemoverEtapa(etapa)"><i class="ti ti-trash" style="color:var(--red);font-size:14px">X</i></button>
                                     </div>
                                 </div>
                                 <div class="etapa-row-meta" style="margin-bottom:5px">@etapa.Descricao</div>
@@ -149,7 +149,6 @@
                                 <div class="form-row">
                                     <label>Responsável</label>
                                     <InputSelect class="input" @bind-Value="etapaModel.ResponsavelIdx">
-                                        <option value="">Selecionar</option>
                                         @foreach (var r in DbContext.GetAll<Responsavel>("Responsaveis"))
                                         {
                                             <option value="@r.Idx">@r.Nome</option>
@@ -258,6 +257,8 @@
     }
     private async Task AdicionarEtapa()
     {
+        if(etapaModel.ResponsavelIdx == 0 || string.IsNullOrEmpty(etapaModel.Nome) || string.IsNullOrEmpty(etapaModel.Descricao))
+            return;
         var etapa = new Etapa()
         {
             IdProjeto = projetoModel.IdProjeto,
@@ -276,9 +277,20 @@
         etapaModel.Inicio = DateTime.Now;
         etapaModel.Status = StatusEtapa.Pendente;
     }
+    private async Task AlterarStatusEtapaAsync(Etapa etapa, ChangeEventArgs e)
+    {
+        etapa.Status = Enum.Parse<StatusEtapa>(e.Value!.ToString()!);
+        await DbContext.UpdateEtapaAsync(etapa);
+    }
+    private async Task RemoverEtapa(Etapa etapa)
+    {
+        EtapasManager.TodasEtapas.Remove(etapa);
+        await DbContext.DeleteEtapa(etapa);
+    }
     private async Task Salvar()
     {
-
+        if(projetoModel.Nome == null || projetoModel.Descricao == null)
+            return;
         var proj = new Card()
         {
             Id = projetoModel.IdProjeto,
@@ -308,6 +320,10 @@
     }
     private async Task Fechar()
     {
+        etapaModel = new();
+        infoModalActive = true;
+        etapaModalActive = false;
+
         await ShowCadastroModalChanged.InvokeAsync(false);
     }
 

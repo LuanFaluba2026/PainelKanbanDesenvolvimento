@@ -7,7 +7,7 @@ namespace PainelKanbanDesenvolvimento.Components.Services;
 
 public static class DbContext
 {
-    private static readonly string DbPath = @"C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\PainelKanbanDev.db";
+    private static readonly string DbPath = @"P:\Fiscal\Arquivos de Apoio\APLICATIVOS\X - Dados Compartilhados\PainelKanban\PainelKanbanDev.db";
 
     private static SQLiteConnection Connection()
     {
@@ -61,10 +61,30 @@ public static class DbContext
                 Prazo = @Prazo,
                 IndexResponsavel = @IndexResponsavel,
                 IndexSetor = @IndexSetor,
-                Observacao = @Observacao
+                Observacao = @Observacao,
+                DataComecoProjeto = @DataComecoProjeto,
+                DataConclusao = @DataConclusao
             WHERE Id = @Id";
 
         await connection.ExecuteAsync(sql, card);
+    }
+    public static async Task UpdateEtapaAsync(Etapa etapa)
+    {
+        using var connection = Connection();
+
+        var sql = @"
+            UPDATE Etapas
+            SET
+                Nome = @Nome,
+                Descricao = @Descricao,
+                ResponsavelIndex = @ResponsavelIndex,
+                Status = @Status,
+                Prazo = @Prazo,
+                DataCriacao = @DataCriacao,
+                DataConclusao = @DataConclusao
+            WHERE Id = @Id";
+
+        await connection.ExecuteAsync(sql, etapa);
     }
     public static async Task DeleteCardByIdAsync(string id)
     {
@@ -73,5 +93,13 @@ public static class DbContext
         var sql = @"DELETE FROM Cards WHERE Id = @Id";
 
         await connection.ExecuteAsync(sql, new { Id = id });
+    }
+    public static async Task DeleteEtapa(Etapa etapa)
+    {
+        using var connection = Connection();
+
+        var sql = @"DELETE FROM Etapas WHERE Id = @Id";
+
+        await connection.ExecuteAsync(sql, new { Id = etapa.Id });
     }
 }

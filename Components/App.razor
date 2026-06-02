@@ -178,7 +178,7 @@
                 justify-content: space-between;
                 position: sticky;
                 top: 0;
-                z-index: 10
+                z-index: 100
             }
 
             .header-logo {
@@ -329,6 +329,9 @@
             }
 
             .col {
+                position: sticky;
+                top: 70px;
+                z-index: 10;
                 background: var(--surface2);
                 border: 1px solid var(--border);
                 border-radius: var(--radius-lg);
@@ -477,7 +480,7 @@
             }
 
             .prog-wrap {
-                margin-top: 10px
+                margin-top: 10px;
             }
 
             .prog-bar {
@@ -485,13 +488,18 @@
                 height: 4px;
                 background: var(--surface2);
                 border-radius: 99px;
-                overflow: hidden
+                overflow: hidden;
+                display: flex;
             }
 
-            .prog-fill {
+            .prog-fill-concluido {
+                background: rgb(55, 160, 73);
                 height: 100%;
-                background: var(--blue);
-                border-radius: 99px
+            }
+
+            .prog-fill-andamento {
+                background: rgb(255, 177, 59);
+                height: 100%;
             }
 
             .prog-label {

@@ -1,0 +1,13 @@
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\PainelKanbanDesenvolvimento.exe
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\appsettings.Development.json
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\appsettings.json
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\PainelKanbanDesenvolvimento.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\PainelKanbanDesenvolvimento.runtimeconfig.json
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\PainelKanbanDesenvolvimento.pdb
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\Dapper.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\System.Data.SQLite.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\runtimes\linux-x64\native\SQLite.Interop.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\runtimes\osx-x64\native\SQLite.Interop.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\runtimes\win-x64\native\SQLite.Interop.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\runtimes\win-x86\native\SQLite.Interop.dll
+C:\Users\luan\Documents\Desenvolvimento Aplicativos\2 - Desenvolvimento Web\PainelKanbanDesenvolvimento\bin\Release\net10.0\publish\PainelKanbanDesenvolvimento.deps.json

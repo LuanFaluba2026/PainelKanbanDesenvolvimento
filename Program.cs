@@ -1,5 +1,6 @@
 using PainelKanbanDesenvolvimento.Components;
 using PainelKanbanDesenvolvimento.Components.Helpers;
+using PainelKanbanDesenvolvimento.Components.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddSingleton<LayoutState>();
+
+builder.Services.AddHostedService<DatabaseCleanupServices>();
 
 var app = builder.Build();
 

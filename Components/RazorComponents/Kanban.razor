@@ -165,10 +165,20 @@
     }
     async Task OnDrop(Status status)
     {
-        if (draggedCard == null)
+        if (draggedCard == null || draggedCard.CurrentStatus == status)
             return;
-
+            
         draggedCard.CurrentStatus = status;
+
+        if (status != Status.Backlog && draggedCard.DataComecoProjeto == null)
+            draggedCard.DataComecoProjeto = DateTime.Now;
+        else if (status == Status.Backlog && draggedCard.DataComecoProjeto != null)
+            draggedCard.DataComecoProjeto = null;
+
+        if (status == Status.Concluido && draggedCard.DataConclusao == null)
+            draggedCard.DataConclusao = DateTime.Now;
+        else if (status != Status.Concluido && draggedCard.DataConclusao != null)
+            draggedCard.DataConclusao = null;
 
         await CardsManager.UpdateCardAsync(draggedCard);
 

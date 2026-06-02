@@ -1,11 +1,43 @@
 @using System.Runtime.InteropServices
+@using Microsoft.AspNetCore.Builder.Extensions
 <div class="card" draggable="true" @ondragstart="() => OnDragStartCard.InvokeAsync(CurrentCard)" @onclick="() => OnCardClick.InvokeAsync(CurrentCard.Id)">
     <span class="badge b-atrasado" style='@(CardsManager.IsAtrasado(CurrentCard) ? "" : "display:none;" )'>Atrasado</span>
     <div class="card-title">@CurrentCard.Nome</div>
     <div class="card-desc">@CurrentCard.Descricao</div>
         <div class="card-badges">
             <span class="badge b-area">@(DbContext.GetByIndex<Setor>("Setores", CurrentCard.IndexSetor)!.Nome)</span>
-            <span class="badge b-alta">@((Prioridade)CurrentCard.Prioridade)</span>
+            <span class="badge b-@GetPriority(CurrentCard.Prioridade)">@((Prioridade)CurrentCard.Prioridade)</span>
+        </div>
+        <hr class="card-divider">
+        <div class="prog-wrap">
+            <div style="display: flex; justify-content: space-between;">
+                <label class="prog-label">Início: @(CurrentCard.DataComecoProjeto?.ToString("dd/MM/yyyy") ?? "--/--/----")</label>
+                <label class="prog-label">@CardsManager.GetElapsedDays(CurrentCard)</label>
+            </div>
+            
+            <div style="display: flex; justify-content: space-between;">
+                <label class="prog-label" style="@(CardsManager.IsAtrasado(CurrentCard) ? "color: red;" : "")">Prazo: @(CurrentCard.Prazo?.ToString("dd/MM/yyyy") ?? "--/--/----")</label>
+                <label class="prog-label" style="@(CardsManager.IsAtrasado(CurrentCard) ? "color: red;" : "")">@CardsManager.GetRemainingDays(CurrentCard)</label>
+            </div>
+            @if(CurrentCard.DataConclusao != null)
+            {
+                <div style="display: flex; justify-content: space-between;">
+                    <label class="prog-label" style="color: green;">Conclusão: @(CurrentCard.DataConclusao?.ToString("dd/MM/yyyy") ?? "--/--/----")</label>
+                </div>
+            }
+            @if(EtapasManager.TodasEtapas.Any(x => x.IdProjeto == CurrentCard.Id))
+            {
+                <br />
+                <div class="prog-bar">
+                    <div class="prog-fill-concluido"
+                        style="@($"width:{CardsManager.GetProgressPercentage(CurrentCard, StatusEtapa.Concluida).ToString(System.Globalization.CultureInfo.InvariantCulture)}%")">
+                    </div>
+                    <div class="prog-fill-andamento"
+                        style="@($"width:{CardsManager.GetProgressPercentage(CurrentCard, StatusEtapa.EmAndamento).ToString(System.Globalization.CultureInfo.InvariantCulture)}%")">
+                    </div>
+                </div>
+                <label class="prog-label">Progresso</label>
+            }
         </div>
         <hr class="card-divider">
         <div class="card-footer">
@@ -40,5 +72,19 @@
     public void Dispose()
     {
         CardsManager.OnChange -= Refresh;
+    }
+    string GetPriority(Prioridade p)
+    {
+        switch(p)
+        {
+            case Prioridade.Baixa:
+                return "baixa";
+            case Prioridade.Media:
+                return "media";
+            case Prioridade.Alta:
+                return "alta";
+            default:
+                return "";
+        }
     }
 }
