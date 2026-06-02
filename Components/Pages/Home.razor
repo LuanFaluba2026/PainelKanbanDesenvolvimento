@@ -99,8 +99,8 @@
     List<Card>? CardsDisponiveis { get; set; } 
     protected override async Task OnInitializedAsync()
     {
-        ReloadCount();
-        CardsManager.OnChange += ReloadCount;
+        Reload();
+        CardsManager.OnChange += Reload;
         CardsDisponiveis = CardsManager.TodosCards;
     }
     Card? SelectedCard;
@@ -123,12 +123,13 @@
             StateHasChanged();
         }
     }
-    async void ReloadCount()
+    async void Reload()
     {
         totalCount = CardsManager.TodosCards.Count();
         andamentoCount = CardsManager.TodosCards.Where(x => x.CurrentStatus == Status.EmAndamento || x.CurrentStatus == Status.Revisao).Count();
         concluidoCount = CardsManager.TodosCards.Where(x => x.CurrentStatus == Status.Concluido).Count();
         atrasadoCount = CardsManager.TodosCards.Where(x => CardsManager.IsAtrasado(x)).Count();
+        CardsDisponiveis = CardsManager.TodosCards;
         await InvokeAsync(StateHasChanged);
     }
     int? CurrentResponsavelIndex = null;
