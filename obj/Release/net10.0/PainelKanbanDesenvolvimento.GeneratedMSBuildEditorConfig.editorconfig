@@ -38,6 +38,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xOb3RGb3VuZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/luan/Documents/Desenvolvimento Aplicativos/2 - Desenvolvimento Web/PainelKanbanDesenvolvimento/Components/RazorComponents/ArchivedDialogModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQXJjaGl2ZWREaWFsb2dNb2RhbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/luan/Documents/Desenvolvimento Aplicativos/2 - Desenvolvimento Web/PainelKanbanDesenvolvimento/Components/RazorComponents/ArchivedModal.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQXJjaGl2ZWRNb2RhbC5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/luan/Documents/Desenvolvimento Aplicativos/2 - Desenvolvimento Web/PainelKanbanDesenvolvimento/Components/RazorComponents/CadastroModal.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSYXpvckNvbXBvbmVudHNcQ2FkYXN0cm9Nb2RhbC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 

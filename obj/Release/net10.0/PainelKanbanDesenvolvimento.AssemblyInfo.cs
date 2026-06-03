@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PainelKanbanDesenvolvimento")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e245e7e207d01947633aff9534553e8984473281")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a1bf9b27d859585b744ad22a591d42cf957ff2aa")]
 [assembly: System.Reflection.AssemblyProductAttribute("PainelKanbanDesenvolvimento")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PainelKanbanDesenvolvimento")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
