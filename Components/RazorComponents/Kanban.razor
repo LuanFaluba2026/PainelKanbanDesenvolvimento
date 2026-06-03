@@ -169,7 +169,7 @@
     {
         CardsDisponiveis = CardsDisponiveis!
             .Select(c => CardsManager.TodosCards.FirstOrDefault(t => t.Id == c.Id) ?? c)
-            .ToList();
+            .Where(x => x.DataArquivamento == null).ToList();
         AssembleCards();
         await InvokeAsync(StateHasChanged);
     }

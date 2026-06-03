@@ -63,7 +63,9 @@ public static class DbContext
                 IndexSetor = @IndexSetor,
                 Observacao = @Observacao,
                 DataComecoProjeto = @DataComecoProjeto,
-                DataConclusao = @DataConclusao
+                DataConclusao = @DataConclusao,
+                DataArquivamento = @DataArquivamento,
+                MotivoArquivamento = @MotivoArquivamento
             WHERE Id = @Id";
 
         await connection.ExecuteAsync(sql, card);

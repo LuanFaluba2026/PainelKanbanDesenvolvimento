@@ -1,0 +1,90 @@
+@if (ShowArquivadosModal)
+{
+    <div class="overlay open" @onclick="Fechar">
+        <div class="modal modal-arquivados" @onclick:stopPropagation="true">
+            <div class="modal-header">
+                <h2>Projetos Arquivados</h2>
+
+                <button class="btn icon" @onclick="Fechar">
+                    <i class="ti ti-x"></i>
+                </button>
+            </div>
+
+            @if (!ProjetosArquivados.Any())
+            {
+                <div class="empty">
+                    Nenhum projeto arquivado.
+                </div>
+            }
+            else
+            {
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Projeto</th>
+                                <th>Data Criação</th>
+                                <th>Data Arquivamento</th>
+                                <th>Motivo Arquivamento</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var projeto in ProjetosArquivados)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@projeto.Nome</strong>
+                                    </td>
+                                    <td>
+                                        @projeto.DataCriacao!.Value.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+                                    <td>
+                                        @projeto.DataArquivamento?.ToString("dd/MM/yyyy HH:mm")
+                                    </td>
+                                    <td>
+                                        @projeto.MotivoArquivamento
+                                    </td>
+                                    <td>
+                                        <button class="btn" @onclick="() => Desarquivar(projeto.Id)">Desarquivar</button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+            <div class="modal-actions">
+                <button class="btn" @onclick="Fechar">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+    [Parameter]
+    public bool ShowArquivadosModal { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ShowArquivadosModalChanged { get; set; }
+
+    private IEnumerable<Card> ProjetosArquivados =>
+        CardsManager.TodosCards
+            .Where(x => x.DataArquivamento != null)
+            .OrderByDescending(x => x.DataArquivamento);
+
+    private async Task Desarquivar(string id)
+    {
+        var card = CardsManager.TodosCards.FirstOrDefault(x => x.Id == id);
+        if(card != null)
+            await CardsManager.DesarquivarCardAsync(card);
+    }
+    private async Task Fechar()
+    {
+        await ShowArquivadosModalChanged.InvokeAsync(false);
+    }
+}

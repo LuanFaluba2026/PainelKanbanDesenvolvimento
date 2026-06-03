@@ -3,6 +3,7 @@
 
 <PageTitle>Home</PageTitle>
 
+<ArchivedModal @bind-ShowArquivadosModal="ArchModalActive" />
 <CadastroModal ShowCadastroModal="ShowModal" ShowCadastroModalChanged="OnModalClosed" ExistingCard="@SelectedCard"/>
 
 <div class="header">
@@ -11,6 +12,20 @@
     Setor de desenvolvimento
   </div>
   <div style="display:flex;align-items:center;gap:8px">
+    <button class="icon-btn" @onclick="ShowArchModal">
+        <svg xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="-0.5 -0.5 16 16"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke="DimGray"
+            height="25"
+            width="25">
+            <path d="M6.5625 7.1875h1.875M12.5 5v6.875a1.25 1.25 0 0 1 -1.25 1.25H3.75a1.25 1.25 0 0 1 -1.25 -1.25V5m10.625 0V3.125a1.25 1.25 0 0 0 -1.25 -1.25H3.125a1.25 1.25 0 0 0 -1.25 1.25v1.875z"
+                stroke-width="1">
+            </path>
+        </svg>
+    </button>
     <div class="view-toggle">
       <button class="vt-btn @(LayoutState.KanbanViewToggle ? "" : "active")" id="btn-kanban" title="Kanban" @onclick="LayoutState.ToggleKanbanView"><i class="ti ti-layout-columns"></i></button>
       <button class="vt-btn @(LayoutState.KanbanViewToggle ? "active" : "")" id="btn-lista" title="Lista" @onclick="LayoutState.ToggleKanbanView"><i class="ti ti-list"></i></button>
@@ -181,5 +196,10 @@
 
         CardsDisponiveis = query.ToList();
         StateHasChanged();
+    }
+    bool ArchModalActive = false;
+    void ShowArchModal()
+    {
+        ArchModalActive = true;
     }
 }

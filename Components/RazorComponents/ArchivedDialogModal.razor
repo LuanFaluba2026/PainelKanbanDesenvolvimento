@@ -1,0 +1,49 @@
+@if (ShowMotivoArquivamentoModal)
+{
+    <div class="overlay open overlay-top">
+        <div class="modal modal-confirmacao">
+            <div class="modal-header">
+                <h2>Arquivar Projeto</h2>
+            </div>
+
+            <div class="form-row">
+                <label>Escreva o motivo do arquivamento</label>
+                <textarea @bind="MotivoArquivamento"></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button class="btn"
+                        @onclick="Fechar">
+                    Cancelar
+                </button>
+
+                <button class="btn primary"
+                        @onclick="ConfirmarArquivamento">
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+    [Parameter] public Card? CardSelecionado { get; set; }
+    [Parameter] public bool ShowMotivoArquivamentoModal { get; set; } = false;
+    [Parameter] public EventCallback<bool> ShowArquivadosModalChanged { get; set; }
+    private string MotivoArquivamento = string.Empty;
+    private async Task ConfirmarArquivamento()
+    {
+        if (string.IsNullOrWhiteSpace(MotivoArquivamento) || CardSelecionado == null)
+            return;
+        
+        CardSelecionado.MotivoArquivamento = MotivoArquivamento;
+        CardSelecionado.DataArquivamento = DateTime.Now;
+        await CardsManager.ArquivarCardAsync(CardSelecionado);
+        await Fechar();
+    }
+    private async Task Fechar()
+    {
+        await ShowArquivadosModalChanged.InvokeAsync(false);
+    }
+}

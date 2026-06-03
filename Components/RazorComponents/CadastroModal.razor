@@ -1,6 +1,7 @@
 @using System.ComponentModel.DataAnnotations
 @if (ShowCadastroModal)
 {
+    <ArchivedDialogModal ShowMotivoArquivamentoModal="ShowArchModal" ShowArquivadosModalChanged="OnArchModalClose" CardSelecionado="ExistingCard"/>
     <div class="overlay open" @onclick="Fechar" style="z-index:120;">
         <div class="modal" @onclick:stopPropagation="true">
 
@@ -182,14 +183,13 @@
                         </div>
                     }
                     <div class="modal-actions">
+                        <button type="button" class="btn" @onclick="Fechar">Cancelar</button>
                         @if(isEditing)
                         {
+                            <button type="button" class="btn" style="background-color: rgb(235, 235, 235); color:black;" @onclick="ArquivarCard">Arquivar</button>
                             <button type="button" class="btn" style="background-color: red; color:white;" @onclick="RemoverCard">Deletar</button>
                         }
-                        <button type="button" class="btn" @onclick="Fechar">Cancelar</button>
-                        <button type="submit" class="btn primary">
-                            Salvar projeto
-                        </button>
+                        <button type="submit" class="btn primary">Salvar projeto</button>
                     </div>
 
                 </EditForm>
@@ -338,5 +338,16 @@
     {
         infoModalActive = false;
         etapaModalActive = true;
+    }
+
+    bool ShowArchModal = false;
+    void ArquivarCard()
+    {
+        ShowArchModal = true;
+    }
+    async void OnArchModalClose()
+    {
+        ShowArchModal = false;
+        await Fechar();
     }
 }

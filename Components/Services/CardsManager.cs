@@ -53,6 +53,32 @@ public static class CardsManager
         Reload();
         OnChange?.Invoke();
     }
+    public static async Task ArquivarCardAsync(Card card)
+    {
+        var existing = TodosCards.FirstOrDefault(x => x.Id == card.Id);
+
+        if(existing != null)
+        {
+            existing.DataArquivamento = card.DataArquivamento;
+            existing.MotivoArquivamento = card.MotivoArquivamento;
+            await DbContext.UpdateCardStatusAsync(existing);
+        }
+        Reload();
+        OnChange?.Invoke();
+    }
+    public static async Task DesarquivarCardAsync(Card card)
+    {
+        var existing = TodosCards.FirstOrDefault(x => x.Id == card.Id);
+
+        if(existing != null)
+        {
+            existing.DataArquivamento = null;
+            existing.MotivoArquivamento = "";
+            await DbContext.UpdateCardStatusAsync(existing);
+        }
+        Reload();
+        OnChange?.Invoke();
+    }
     public static async Task RemoveCardAsync(string cardId)
     {
         await DbContext.DeleteCardByIdAsync(cardId);
