@@ -140,11 +140,11 @@
     }
     async void Reload()
     {
-        totalCount = CardsManager.TodosCards.Count();
-        andamentoCount = CardsManager.TodosCards.Where(x => x.CurrentStatus == Status.EmAndamento || x.CurrentStatus == Status.Revisao).Count();
-        concluidoCount = CardsManager.TodosCards.Where(x => x.CurrentStatus == Status.Concluido).Count();
-        atrasadoCount = CardsManager.TodosCards.Where(x => CardsManager.IsAtrasado(x)).Count();
-        CardsDisponiveis = CardsManager.TodosCards;
+        totalCount = CardsManager.CardsDisponiveis.Count();
+        andamentoCount = CardsManager.CardsDisponiveis.Where(x => x.CurrentStatus == Status.EmAndamento || x.CurrentStatus == Status.Revisao).Count();
+        concluidoCount = CardsManager.CardsDisponiveis.Where(x => x.CurrentStatus == Status.Concluido).Count();
+        atrasadoCount = CardsManager.CardsDisponiveis.Where(x => CardsManager.IsAtrasado(x)).Count();
+        CardsDisponiveis = CardsManager.CardsDisponiveis;
         await InvokeAsync(StateHasChanged);
     }
     int? CurrentResponsavelIndex = null;

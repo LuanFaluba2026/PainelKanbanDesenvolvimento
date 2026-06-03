@@ -23,7 +23,7 @@ public static class CardsManager
     public static void Reload()
     {
         TodosCards = DbContext.GetAll<Card>("Cards");
-        CardsDisponiveis = new List<Card>(TodosCards);
+        CardsDisponiveis = new List<Card>(TodosCards.Where(x => x.DataArquivamento == null));
     }
     public static async Task AddNewCard(Card card)
     {
